@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none"
+    tools:context=".ui.home.HomeFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/top_body"
+            style="@style/defaultPadding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/secondaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:text="Hello," />
+
+                <TextView
+                    style="@style/primaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vaibhav" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/user_profile_button"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/user"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/roboto_medium"
+                    android:gravity="center"
+                    android:text="V"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/top_body"
+            android:layout_marginHorizontal="24dp"
+            android:background="@drawable/search_back"
+            android:orientation="horizontal"
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="16dp"
+            android:weightSum="5">
+
+            <LinearLayout
+                android:id="@+id/search_bar_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/search_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:fontFamily="@font/roboto"
+                    android:text="Search for medicines"
+                    android:textColor="#8B8B8B"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="end">
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="8dp"
+                    android:background="#C6C6C6" />
+
+                <ImageButton
+                    android:id="@+id/upload_prescription_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/camera_icon" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/categories_heading"
+            style="@style/defaultPadding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search_bar"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Categories"
+                android:textColor="@color/primaryText"
+                android:textSize="22sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="View all" />
+
+                <ImageButton
+                    android:id="@+id/view_all_categories_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/view_all_icon" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categories_list_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/categories_heading"
+            android:orientation="horizontal"
+            android:paddingHorizontal="24dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/categories_item" />
+
+
+        <com.synnapps.carouselview.CarouselView
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:layout_below="@id/categories_list_items"
+            android:layout_width="match_parent"
+            android:id="@+id/horizontal_list_banner_images"
+            android:layout_height="200dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/prescription_card"
+            android:layout_marginHorizontal="24dp"
+            android:layout_below="@id/horizontal_list_banner_images"
+            android:layout_width="match_parent"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="#FFFCFC"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:paddingVertical="18dp"
+                android:paddingHorizontal="24dp"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:fontFamily="@font/roboto_bold"
+                    android:textSize="18sp"
+                    android:textColor="#494949"
+                    android:text="Order quickly with prescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_marginTop="8dp"
+                    android:textSize="14sp"
+                    android:text="Upload prescription and tell us what do you need. we do the rest!"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="5"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_weight="5"
+                        android:textColor="@color/discountColor"
+                        android:text="Save 10%"
+                        android:textSize="16dp"
+                        android:gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"/>
+
+                    <ImageButton
+                        android:id="@+id/upload_prescription_image_button"
+                        android:background="@drawable/prescription_upload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_marginTop="16dp"
+            android:id="@+id/top_selling_list"
+            style="@style/defaultPadding"
+            android:layout_below="@id/prescription_card"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Top Selling"
+                android:textColor="@color/primaryText"
+                android:textSize="22sp" />
+
+            <include layout="@layout/category_item" />
+            <include layout="@layout/category_item" />
+            <include layout="@layout/category_item" />
+            <include layout="@layout/category_item" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_below="@id/top_selling_list"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+
+    </RelativeLayout>
+
+</ScrollView>

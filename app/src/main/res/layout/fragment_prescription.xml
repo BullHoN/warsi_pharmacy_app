@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/defaultPadding"
+    tools:context=".ui.prescription.PrescriptionFragment">
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/backButton"
+                android:background="@drawable/left_arrow_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"/>
+
+            <TextView
+                android:layout_marginLeft="24dp"
+                android:textSize="24sp"
+                android:text="Upload The Prescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_marginTop="5dp"
+            android:background="@color/primaryText"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="32dp"
+        android:id="@+id/upload_layout"
+        android:layout_below="@id/toolbar"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:scaleType="fitCenter"
+            android:id="@+id/prescription_image"
+            android:src="@drawable/ic_prescription"
+            android:layout_width="250dp"
+            android:layout_height="200dp"/>
+
+        <TextView
+            android:layout_marginTop="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Upload Photo Of Your Prescription"
+            android:textColor="@color/primaryText"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/select_image_button"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="12dp"
+            android:text="Select Image"
+            android:textColor="@android:color/white"
+            android:background="@drawable/add_button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_marginTop="24dp"
+        android:layout_below="@id/upload_layout"
+        android:layout_width="match_parent"
+        app:contentPadding="18dp"
+        android:elevation="4dp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="How it works ??"
+                android:textColor="@color/primaryText"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_marginTop="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Step 1 : Upload Your Prescription!!"
+                android:textColor="@color/primaryText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Step 2 : Our Team will receive your request."
+                android:textColor="@color/primaryText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Step 3 : Our Team will contact you ;)."
+                android:textColor="@color/primaryText"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <Button
+        android:id="@+id/send_prescription_button"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/add_button_back"
+        android:layout_alignParentBottom="true"
+        android:text="PRoceed"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>

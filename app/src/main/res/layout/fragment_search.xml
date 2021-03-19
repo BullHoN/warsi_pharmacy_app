@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    tools:context=".ui.search.SearchFragment">
+
+    <RelativeLayout
+        style="@style/defaultPadding"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/backButton"
+                    android:background="@drawable/left_arrow_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+
+                <androidx.appcompat.widget.SearchView
+                    android:layout_marginTop="16dp"
+                    app:iconifiedByDefault="false"
+                    android:layout_below="@id/backButton"
+                    android:id="@+id/search_bar"
+                    android:paddingVertical="12dp"
+                    android:background="@drawable/search_back"
+                    android:backgroundTint="@color/softColor"
+                    app:searchIcon="@drawable/search_icon"
+                    app:queryBackground="@android:color/transparent"
+                    app:submitBackground="@android:color/transparent"
+                    app:queryHint="Search for medicines"
+                    app:searchHintIcon="@drawable/search_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+    </RelativeLayout>
+
+
+
+</ScrollView>
