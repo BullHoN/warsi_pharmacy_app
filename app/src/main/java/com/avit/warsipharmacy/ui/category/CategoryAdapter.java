@@ -2,14 +2,19 @@ package com.avit.warsipharmacy.ui.category;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avit.warsipharmacy.R;
@@ -21,16 +26,28 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public interface CategoryInterface{
         void addToCart(CategoryItem categoryItem);
+        boolean alreadyAddedToCart(CategoryItem categoryItem);
+        void deleteFromCart(String name);
     }
 
     private List<CategoryItem> categoryItemList;
     private Context context;
     private CategoryInterface categoryInterface;
+    private boolean isRecommendation;
+    private String TAG = "CategoryAdapter";
 
     public CategoryAdapter(Context context,CategoryInterface categoryInterface){
         this.categoryItemList = new ArrayList<>();
         this.context = context;
         this.categoryInterface = categoryInterface;
+        isRecommendation = false;
+    }
+
+    public CategoryAdapter(Context context,CategoryInterface categoryInterface,boolean isRecommendation){
+        this.categoryItemList = new ArrayList<>();
+        this.context = context;
+        this.categoryInterface = categoryInterface;
+        this.isRecommendation = isRecommendation;
     }
 
     @NonNull
@@ -41,20 +58,71 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final CategoryViewHolder holder, final int position) {
+
         final CategoryItem currItem = categoryItemList.get(position);
+        boolean isalreadyPresent = categoryInterface.alreadyAddedToCart(currItem);
+
+
+        if(isalreadyPresent){
+            holder.addToCartButton.setVisibility(View.GONE);
+            holder.deleteItemButton.setVisibility(View.VISIBLE);
+        }else{
+            holder.addToCartButton.setVisibility(View.VISIBLE);
+            holder.deleteItemButton.setVisibility(View.GONE);
+        }
 
 //         Add to Cart
-        holder.addToCartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                categoryInterface.addToCart(currItem);
-            }
-        });
+        if(!isalreadyPresent) {
+            holder.addToCartButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.addToCartButton.setVisibility(View.GONE);
+                    holder.deleteItemButton.setVisibility(View.VISIBLE);
+                    categoryInterface.addToCart(currItem);
 
-        int originalPrice = currItem.getPrice();
+                    if(isRecommendation){
+                        categoryItemList.remove(position);
+                        notifyDataSetChanged();
+                        return;
+                    }
+
+                    holder.deleteItemButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            holder.addToCartButton.setVisibility(View.VISIBLE);
+                            holder.deleteItemButton.setVisibility(View.GONE);
+                            categoryInterface.deleteFromCart(currItem.getItemName());
+                        }
+                    });
+                }
+            });
+        }else{
+
+            holder.deleteItemButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.addToCartButton.setVisibility(View.VISIBLE);
+                    holder.deleteItemButton.setVisibility(View.GONE);
+                    categoryInterface.deleteFromCart(currItem.getItemName());
+
+                    holder.addToCartButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            holder.addToCartButton.setVisibility(View.GONE);
+                            holder.deleteItemButton.setVisibility(View.VISIBLE);
+                            categoryInterface.addToCart(currItem);
+                        }
+                    });
+                }
+            });
+        }
+
+        // DECIDE THE PRICE BASED ON CURRENT SELECTION OF PRICE ITEM
+
+        int originalPrice = currItem.getPriceItems().get(0).getPrice();
         int discount = currItem.getDiscount();
-        int discountedPrice = currItem.getPrice() - currItem.getPrice()*currItem.getDiscount()/100;
+        int discountedPrice = originalPrice - originalPrice*currItem.getDiscount()/100;
         int savedAmount = originalPrice - discountedPrice;
 
         //TODO: DECIDE THE ITEM IMAGE BASED ON CATEOGRY
@@ -74,6 +142,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         notifyDataSetChanged();
     }
 
+
     @Override
     public int getItemCount() {
         return categoryItemList.size();
@@ -83,7 +152,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         TextView itemNameView,itemPriceView,itemDiscountView,itemOriginalPriceView,itemTotalSaveView;
         ImageView itemImage;
-        ImageButton addToCartButton;
+        RelativeLayout addToCartButton;
+        ImageButton deleteItemButton;
+        LinearLayout categoryItemLayout;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -97,8 +168,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemImage = itemView.findViewById(R.id.item_image);
 
             addToCartButton = itemView.findViewById(R.id.add_to_cart_button);
+            deleteItemButton = itemView.findViewById(R.id.deleteItem);
+
+            categoryItemLayout = itemView.findViewById(R.id.category_item_layout);
 
         }
     }
+
+
 
 }

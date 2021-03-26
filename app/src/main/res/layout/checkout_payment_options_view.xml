@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <Button
+            android:textColor="@android:color/white"
+            android:background="@drawable/add_button_back"
+            android:id="@+id/upi_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pay With UPI" />
+
+        <TextView
+            android:gravity="center_horizontal"
+            android:text="OR"
+            android:layout_marginVertical="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/cod_button"
+            android:textColor="@android:color/white"
+            android:background="@drawable/add_button_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cash On Delivery" />
+
+    </LinearLayout>
+
+</RelativeLayout>

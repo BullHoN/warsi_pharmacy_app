@@ -43,6 +43,7 @@ public class PrescriptionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_prescription, container, false);
+        prescriptionImageUri = null;
 
         prescriptionImageView = root.findViewById(R.id.prescription_image);
         sendPrescriptionButton = root.findViewById(R.id.send_prescription_button);
@@ -83,12 +84,20 @@ public class PrescriptionFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: ADD SOME VALIDATION FOR IMAGE
+                        if(prescriptionImageUri == null){
+                            Toasty.warning(getContext(),"Select Image",Toasty.LENGTH_SHORT)
+                                    .show();
+                            return;
+                        }
+
                         // TODO: SEND PRESCRIPTION TO SERVER
                         Toasty.success(getContext(),"Success !!",Toasty.LENGTH_SHORT,true)
                                 .show();
 
                         getFragmentManager()
                                 .popBackStack();
+
+                        // TODO: ADD SOME DATA
 
                         Fragment fragment = new SuccessFragment();
                         openFragment(fragment,android.R.anim.fade_in,android.R.anim.fade_out);

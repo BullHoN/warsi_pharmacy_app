@@ -84,12 +84,13 @@
                 android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 tools:itemCount="5"
+                android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/category_item"
                 android:layout_height="wrap_content"/>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
+                android:layout_height="80dp"/>
 
         </LinearLayout>
 

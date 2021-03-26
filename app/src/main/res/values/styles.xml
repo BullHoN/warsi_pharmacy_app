@@ -1,10 +1,11 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="chipIconTint">@color/colorPrimaryDark</item>
     </style>
 
     <style name="defaultPadding">
@@ -25,6 +26,19 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/primaryText</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="My_Widget.MaterialComponents.Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
+        <!-- Chip background color selector -->
+        <item name="chipBackgroundColor">@drawable/chip_state</item>
+        <!-- Border color -->
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipStrokeColor">@color/colorPrimaryDark</item>
+
+        <!-- Chip text color selector -->
+        <item name="android:textColor">@drawable/chip_state_text</item>
+        <!-- Chip close icon color selector -->
+        <item name="closeIconTint">@color/colorPrimaryDark</item>
     </style>
 
 </resources>

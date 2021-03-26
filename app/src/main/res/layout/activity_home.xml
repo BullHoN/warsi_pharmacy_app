@@ -29,4 +29,53 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
 
+    <LinearLayout
+        android:id="@+id/cartDetails"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/nav_view"
+        android:layout_width="match_parent"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="16dp"
+        android:weightSum="5"
+        android:background="@android:color/white"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_weight="4"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="₹ 20.00"
+                android:textSize="18sp"
+                android:textColor="#303030" />
+
+            <TextView
+                android:id="@+id/saved_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SAVE ₹5"
+                android:textSize="12sp"
+                android:textColor="@color/discountColor" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/go_to_cart"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Go to cart"
+            android:background="@drawable/add_button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

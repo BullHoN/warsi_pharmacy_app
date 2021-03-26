@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/category_item_layout"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
     android:orientation="horizontal">
@@ -45,6 +46,7 @@
                         android:textColor="@color/discountColor" />
 
                     <TextView
+                        android:textAllCaps="true"
                         android:id="@+id/item_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -86,14 +88,33 @@
 
                 </LinearLayout>
 
-                <ImageButton
+                <RelativeLayout
                     android:id="@+id/add_to_cart_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/add_button"
+                    android:background="@drawable/add_button_back"
+                    android:layout_width="55dp"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:layout_height="30dp" >
+
+                    <TextView
+                        android:layout_centerInParent="true"
+                        android:textColor="@android:color/white"
+                        android:text="ADD"
+                        android:fontFamily="@font/roboto_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </RelativeLayout>
+
+                <ImageButton
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:id="@+id/deleteItem"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/ic_delete" />
+
 
             </LinearLayout>
 

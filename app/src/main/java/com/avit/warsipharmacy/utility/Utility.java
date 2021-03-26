@@ -14,6 +14,7 @@ public class Utility {
 
         if(v != null){
             inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            v.clearFocus();
         }
     }
 

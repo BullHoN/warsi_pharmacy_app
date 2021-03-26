@@ -23,12 +23,10 @@ public class AddressFragment extends Fragment {
         // to hide keyboard when not necessary
         Utility.setupUI(root,getContext());
 
-        root.findViewById(R.id.save_data).setOnClickListener(new View.OnClickListener() {
+        // back Button
+        root.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: ADD ITEMS TO SHARED PREFRENCES
-                Toasty.success(getContext(),"Successfully changed!!",Toasty.LENGTH_SHORT)
-                        .show();
                 getFragmentManager()
                         .popBackStackImmediate();
             }

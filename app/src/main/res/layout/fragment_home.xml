@@ -263,10 +263,13 @@
                 android:textColor="@color/primaryText"
                 android:textSize="22sp" />
 
-            <include layout="@layout/category_item" />
-            <include layout="@layout/category_item" />
-            <include layout="@layout/category_item" />
-            <include layout="@layout/category_item" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/topSellingRecyclerView"
+                android:layout_width="match_parent"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="4"
+                tools:listitem="@layout/category_item"
+                android:layout_height="match_parent"/>
 
         </LinearLayout>
 

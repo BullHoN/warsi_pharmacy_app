@@ -14,33 +14,58 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.avit.warsipharmacy.R;
+import com.avit.warsipharmacy.ui.orders.OrdersFragment;
 
 public class SuccessFragment extends Fragment {
 
     private Button callToActionButton;
     private int NOTIFICATION_ID = 1;
+    private String title,message;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_success, container, false);
-
-        // TODO: SHOW NOTIFICATION
-        showNotification("We Got Your Prescription!!","Our team will contact you soon");
-
-        // TODO: CHECK FOR THE TYPE OF MESSAGE TO SET THE CALL TO ACTION
-        // TODO: IF ORDER THAN SHOW ORDER OTHERWISE CONTINUE SHOPPING
+        TextView titleView = root.findViewById(R.id.title);
 
         callToActionButton = root.findViewById(R.id.call_to_action_button);
-        callToActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager()
-                    .popBackStackImmediate();
-            }
-        });
+        Bundle bundle = getArguments();
+        if(bundle != null){ // Order
+            title = "We Got Your Order";
+            message = "Our team will contact you soon";
+            titleView.setText(title);
+            callToActionButton.setText("View Order");
+
+            callToActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getFragmentManager()
+                            .popBackStack();
+
+                    Fragment fragment = new OrdersFragment();
+                    openFragment(fragment,android.R.anim.fade_in,android.R.anim.fade_out);
+                }
+            });
+
+        }else{ // Prescription
+            title = "We Got Your Prescription";
+            message = "Our team will contact you soon";
+            titleView.setText(title);
+            callToActionButton.setText("Continue shopping");
+
+            callToActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getFragmentManager()
+                            .popBackStackImmediate();
+                }
+            });
+        }
+
+        showNotification(title,message);
 
         return root;
     }
@@ -78,6 +103,15 @@ public class SuccessFragment extends Fragment {
 
         notificationManager.notify(NOTIFICATION_ID,notificationBuilder.build());
 
+    }
+
+    private void openFragment(Fragment fragment,int anim1,int anim2){
+        getFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(anim1,anim2)
+                .replace(R.id.nav_host_fragment,fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
 }

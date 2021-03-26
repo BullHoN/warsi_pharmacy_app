@@ -18,20 +18,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avit.warsipharmacy.R;
+import com.avit.warsipharmacy.ui.cart.CartItem;
 import com.avit.warsipharmacy.ui.categories.CategoriesFragment;
+import com.avit.warsipharmacy.ui.category.CategoryAdapter;
 import com.avit.warsipharmacy.ui.category.CategoryFragment;
+import com.avit.warsipharmacy.ui.category.CategoryItem;
 import com.avit.warsipharmacy.ui.prescription.PrescriptionFragment;
 import com.avit.warsipharmacy.ui.profile.UserProfileFragment;
 import com.avit.warsipharmacy.ui.search.SearchFragment;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private List<Pair<String,Integer>> list;
+
     // TODO: TAKE IMAGES FROM SERVER
     int[] sampleImages = {R.drawable.banner1, R.drawable.banner2, R.drawable.banner1, R.drawable.banner4, R.drawable.banner2};
 
@@ -119,6 +124,40 @@ public class HomeFragment extends Fragment {
         });
 
         displayCategoriesRecyclerView.setAdapter(displayCategoriesAdapter);
+
+
+        // top selling items
+        RecyclerView topSellingRecyclerView = root.findViewById(R.id.topSellingRecyclerView);
+        topSellingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
+
+        CategoryAdapter topSellingAdapter = new CategoryAdapter(getContext(), new CategoryAdapter.CategoryInterface() {
+            @Override
+            public void addToCart(CategoryItem categoryItem) {
+                List<CategoryItem.PriceItem> priceItems = new ArrayList<>();
+                priceItems.add(new CategoryItem.PriceItem("100ml",300));
+                priceItems.add(new CategoryItem.PriceItem("300ml",500));
+                priceItems.add(new CategoryItem.PriceItem("500ml",800));
+
+                CartItem cartItem = new CartItem(categoryItem.getItemName(),categoryItem.getCategoryName(),0,categoryItem.getDiscount()
+                        ,priceItems);
+                homeViewModel.addToCart(cartItem);
+            }
+
+            @Override
+            public boolean alreadyAddedToCart(CategoryItem categoryItem) {
+                return homeViewModel.isPresentInCart(categoryItem);
+            }
+
+            @Override
+            public void deleteFromCart(String name) {
+                homeViewModel.deleteCartItemByName(name);
+            }
+        });
+
+        List<CategoryItem> topSellingItems = homeViewModel.getTopSellingItems();
+        topSellingAdapter.setCategoryItemList(topSellingItems);
+
+        topSellingRecyclerView.setAdapter(topSellingAdapter);
 
         return root;
     }
