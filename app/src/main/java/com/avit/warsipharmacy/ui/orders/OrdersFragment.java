@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avit.warsipharmacy.R;
+import com.avit.warsipharmacy.ui.home.HomeFragment;
 import com.avit.warsipharmacy.ui.order.OrderFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.ChipGroup;
 import com.google.gson.Gson;
 
@@ -30,12 +33,28 @@ public class OrdersFragment extends Fragment {
     private ChipGroup chipGroup;
     private List<OrderItem> orderItemList;
     private Gson gson;
+    private LinearLayout emptyOrdersView;
+    private Button exploreButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ordersViewModel =
                 ViewModelProviders.of(this).get(OrdersViewModel.class);
         View root = inflater.inflate(R.layout.fragment_orders, container, false);
+
+        emptyOrdersView = root.findViewById(R.id.emptyOrders);
+        exploreButton = root.findViewById(R.id.explore);
+
+        exploreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new HomeFragment();
+                BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.nav_view);
+                bottomNavigationView.getMenu().findItem(R.id.navigation_home).setChecked(true);
+
+                openFragment(fragment,android.R.anim.fade_in,android.R.anim.fade_out);
+            }
+        });
 
         orderItemList = new ArrayList<>();
         gson = new Gson();
@@ -61,6 +80,13 @@ public class OrdersFragment extends Fragment {
         ordersViewModel.getOrderItemMutableLiveData().observe(getViewLifecycleOwner(), new Observer<List<OrderItem>>() {
             @Override
             public void onChanged(List<OrderItem> orderItems) {
+
+                if(orderItems.size() > 0){
+                    emptyOrdersView.setVisibility(View.INVISIBLE);
+                }else{
+                    emptyOrdersView.setVisibility(View.VISIBLE);
+                }
+
                 orderItemList = orderItems;
                 ordersAdapter.setOrderItemList(orderItems);
             }

@@ -94,6 +94,38 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"/>
 
+        <LinearLayout
+            android:id="@+id/emptyOrders"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/ic_vitamin"
+                android:layout_width="150dp"
+                android:layout_height="150dp" />
+
+            <TextView
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_bold"
+                android:textColor="@color/primaryText"
+                android:layout_marginTop="18dp"
+                android:gravity="center"
+                android:text="No Orders Available"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_marginTop="12dp"
+                android:id="@+id/explore"
+                android:text="Explore"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
     </RelativeLayout>
 
 </ScrollView>
