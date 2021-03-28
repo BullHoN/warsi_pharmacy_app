@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.util.Pair;
@@ -49,6 +50,7 @@ public class CategoryFragment extends Fragment {
     private boolean requestMoreItems, isSearching;
     private String search_query;
     private String TAG = "CategoryFragment";
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -62,6 +64,7 @@ public class CategoryFragment extends Fragment {
         searchView = root.findViewById(R.id.search_bar);
         bottomProgressBar = root.findViewById(R.id.progressBar);
         mainProgressBar = root.findViewById(R.id.mainProgressBar);
+        swipeRefreshLayout = root.findViewById(R.id.swipable_layout);
 
         searchView.setSubmitButtonEnabled(true);
         requestMoreItems = true;
@@ -203,7 +206,7 @@ public class CategoryFragment extends Fragment {
             }
         });
 
-
+        // search item listener
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -221,6 +224,20 @@ public class CategoryFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
+            }
+        });
+
+        // on refresh
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                categoryAdapter.clearAllItems();
+                page = 1;
+                isSearching = false;
+                requestMoreItems = true;
+                mainProgressBar.setVisibility(View.VISIBLE);
+                categoryViewModel.getTheCategoryItemsFromServer(categoryName.toLowerCase(),limit,page++);
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
 
