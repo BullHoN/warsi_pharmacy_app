@@ -142,6 +142,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         notifyDataSetChanged();
     }
 
+    public void addCategoryItems(List<CategoryItem> categoryItems){
+        this.categoryItemList.addAll(categoryItems);
+        notifyDataSetChanged();
+    }
+
+    public void clearAllItems(){
+        this.categoryItemList.clear();
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/scrollView"
     android:fillViewport="true"
     tools:context=".ui.search.SearchFragment">
 
@@ -83,9 +84,17 @@
                 android:id="@+id/categories_list_items"
                 android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
-                tools:itemCount="5"
+                tools:itemCount="3"
                 android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/category_item"
+                android:layout_height="wrap_content"/>
+
+            <ProgressBar
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:layout_marginBottom="50dp"
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <View
@@ -93,6 +102,12 @@
                 android:layout_height="80dp"/>
 
         </LinearLayout>
+
+        <ProgressBar
+            android:layout_centerInParent="true"
+            android:id="@+id/mainProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 

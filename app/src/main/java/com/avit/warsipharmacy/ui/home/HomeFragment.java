@@ -1,6 +1,7 @@
 package com.avit.warsipharmacy.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avit.warsipharmacy.R;
+import com.avit.warsipharmacy.network.NetworkAPI;
+import com.avit.warsipharmacy.network.RetrofitClient;
 import com.avit.warsipharmacy.ui.cart.CartItem;
 import com.avit.warsipharmacy.ui.categories.CategoriesFragment;
 import com.avit.warsipharmacy.ui.category.CategoryAdapter;
@@ -32,10 +35,17 @@ import com.synnapps.carouselview.ImageListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private List<Pair<String,Integer>> list;
+    private String TAG = "HomeFragment";
 
     // TODO: TAKE IMAGES FROM SERVER
     int[] sampleImages = {R.drawable.banner1, R.drawable.banner2, R.drawable.banner1, R.drawable.banner4, R.drawable.banner2};
@@ -153,11 +163,14 @@ public class HomeFragment extends Fragment {
                 homeViewModel.deleteCartItemByName(name);
             }
         });
-
-        List<CategoryItem> topSellingItems = homeViewModel.getTopSellingItems();
-        topSellingAdapter.setCategoryItemList(topSellingItems);
-
         topSellingRecyclerView.setAdapter(topSellingAdapter);
+
+        homeViewModel.getListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<List<CategoryItem>>() {
+            @Override
+            public void onChanged(List<CategoryItem> topSellingItems) {
+                topSellingAdapter.setCategoryItemList(topSellingItems);
+            }
+        });
 
         return root;
     }
@@ -170,5 +183,6 @@ public class HomeFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
+
 
 }

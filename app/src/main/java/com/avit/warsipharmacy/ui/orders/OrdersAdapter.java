@@ -47,9 +47,9 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderItemV
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         holder.orderDateView.setText(simpleDateFormat.format(currItem.getOrder_date()));
-        holder.orderQuantityView.setText(currItem.getCartItems().size()+"");
+        holder.orderQuantityView.setText(currItem.getOrderItems().size()+"");
 
-        int total_amount = OrderItem.getTotal(currItem.getCartItems());
+        int total_amount = OrderItem.getTotal(currItem.getOrderItems());
         holder.orderTotalView.setText("₹" + total_amount);
 
         holder.openDetailsButton.setOnClickListener(new View.OnClickListener() {

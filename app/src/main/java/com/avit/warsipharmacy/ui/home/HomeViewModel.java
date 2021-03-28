@@ -1,6 +1,7 @@
 package com.avit.warsipharmacy.ui.home;
 
 import android.app.Application;
+import android.util.Log;
 import android.util.Pair;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -10,24 +11,32 @@ import androidx.lifecycle.ViewModel;
 
 import com.avit.warsipharmacy.R;
 import com.avit.warsipharmacy.db.CartRepository;
+import com.avit.warsipharmacy.network.NetworkAPI;
+import com.avit.warsipharmacy.network.RetrofitClient;
 import com.avit.warsipharmacy.ui.cart.CartItem;
 import com.avit.warsipharmacy.ui.category.CategoryItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class HomeViewModel extends AndroidViewModel {
 
     private List<Pair<String,Integer>> categoriesItems;
-    private List<CategoryItem> topSellingItems;
+    private MutableLiveData<List<CategoryItem>> listMutableLiveData;
     private CartRepository cartRepository;
+    private String TAG = "HomeViewModel";
 
     public HomeViewModel(Application application) {
         super(application);
 
         cartRepository = new CartRepository(application);
 
-        // TODO: MAKE THE NEWTOWRK CALL TO GET ALL CATEGORIES
         categoriesItems = new ArrayList<>();
 
         categoriesItems.add(new Pair<>("Tablets", R.drawable.tablets_icon));
@@ -36,20 +45,33 @@ public class HomeViewModel extends AndroidViewModel {
         categoriesItems.add(new Pair<>("Syrups",R.drawable.syrups_icon));
 
 
-        // TODO: MAKE NETWORK CALL TO GET THE TOP SELLING
-        topSellingItems = new ArrayList<>();
-        List<CategoryItem.PriceItem> priceItems = new ArrayList<>();
+        listMutableLiveData = new MutableLiveData<>();
+        getTopSellingItemsFromServer();
+    }
 
-        priceItems.add(new CategoryItem.PriceItem("1 unit",120));
-        priceItems.add(new CategoryItem.PriceItem("2 unit",170));
-        priceItems.add(new CategoryItem.PriceItem("3 unit",220));
+    private void getTopSellingItemsFromServer(){
+        Retrofit retrofitClient = RetrofitClient.getInstance();
+        NetworkAPI networkAPI = retrofitClient.create(NetworkAPI.class);
 
-        topSellingItems.add(new CategoryItem("topselling1","zeher",2,priceItems));
-        topSellingItems.add(new CategoryItem("topselling2","zeher",13,priceItems));
-        topSellingItems.add(new CategoryItem("topselling3","zeher",26,priceItems));
-        topSellingItems.add(new CategoryItem("topselling4","zeher",87,priceItems));
+        Call<List<CategoryItem>> call = networkAPI.getTopSelling();
+        call.enqueue(new Callback<List<CategoryItem>>() {
+            @Override
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
+                List<CategoryItem> categoryItems  = response.body();
+                listMutableLiveData.setValue(categoryItems);
+            }
 
+            @Override
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                Toasty.error(getApplication(),t.getMessage(),Toasty.LENGTH_SHORT)
+                        .show();
+            }
+        });
 
+    }
+
+    public MutableLiveData<List<CategoryItem>> getListMutableLiveData() {
+        return listMutableLiveData;
     }
 
     public void delete(CartItem cartItem){
@@ -66,10 +88,6 @@ public class HomeViewModel extends AndroidViewModel {
 
     public void deleteCartItemByName(String name){
         cartRepository.deleteCartItemByName(name);
-    }
-
-    public List<CategoryItem> getTopSellingItems() {
-        return topSellingItems;
     }
 
     public List<Pair<String, Integer>> getCategoriesItems() {

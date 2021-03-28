@@ -54,10 +54,10 @@ public class OrderFragment extends Fragment {
 
         orderItemsView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
         CheckoutOrderItemsAdapter adapter = new CheckoutOrderItemsAdapter(getContext());
-        adapter.setCartItems(currOrderItem.getCartItems());
+        adapter.setCartItems(currOrderItem.getOrderItems());
         orderItemsView.setAdapter(adapter);
 
-        int total_amount = OrderItem.getTotal(currOrderItem.getCartItems());
+        int total_amount = OrderItem.getTotal(currOrderItem.getOrderItems());
         deliveryPriceView.setText("₹" + currOrderItem.getDeliveryPrice());
         totalPriceView.setText("₹" + total_amount);
 

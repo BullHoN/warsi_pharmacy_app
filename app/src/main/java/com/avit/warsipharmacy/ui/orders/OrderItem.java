@@ -8,21 +8,14 @@ import java.util.List;
 public class OrderItem {
     private String order_id;
     private Date order_date;
-    private List<CartItem> cartItems;
+    private List<CartItem> orderItems;
     private int status;
     private int deliveryPrice;
 
-    public OrderItem(String order_id, Date order_date, List<CartItem> cartItems, int status) {
+    public OrderItem(String order_id, Date order_date, List<CartItem> orderItems, int status, int deliveryPrice) {
         this.order_id = order_id;
         this.order_date = order_date;
-        this.cartItems = cartItems;
-        this.status = status;
-    }
-
-    public OrderItem(String order_id, Date order_date, List<CartItem> cartItems, int status, int deliveryPrice) {
-        this.order_id = order_id;
-        this.order_date = order_date;
-        this.cartItems = cartItems;
+        this.orderItems = orderItems;
         this.status = status;
         this.deliveryPrice = deliveryPrice;
     }
@@ -60,8 +53,8 @@ public class OrderItem {
         return order_date;
     }
 
-    public List<CartItem> getCartItems() {
-        return cartItems;
+    public List<CartItem> getOrderItems() {
+        return orderItems;
     }
 
     public int getStatus() {

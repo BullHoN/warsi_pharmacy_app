@@ -2,7 +2,9 @@ package com.avit.warsipharmacy.ui.category;
 
 import android.app.Application;
 import android.graphics.Paint;
+import android.util.Log;
 import android.util.Pair;
+import android.widget.LinearLayout;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -10,41 +12,81 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.avit.warsipharmacy.db.CartRepository;
+import com.avit.warsipharmacy.network.NetworkAPI;
+import com.avit.warsipharmacy.network.RetrofitClient;
 import com.avit.warsipharmacy.ui.cart.CartItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class CategoryViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<CategoryItem>> categoryItems;
+    private MutableLiveData<List<CategoryItem>> searchItems;
     private CartRepository cartRepository;
     private LiveData<List<CartItem>> cartItemLiveData;
+    private String TAG = "CategoryViewModel";
 
     public CategoryViewModel(Application application){
         super(application);
 
-        //TODO: GET THE CATEGORY ITEMS FROM DATABASE
         cartRepository = new CartRepository(application);
         cartItemLiveData = cartRepository.getAllItems();
 
         categoryItems = new MutableLiveData<>();
-        List<CategoryItem> list = new ArrayList<>();
-        List<CategoryItem.PriceItem> priceItems = new ArrayList<>();
+        searchItems = new MutableLiveData<>();
 
-        priceItems.add(new CategoryItem.PriceItem("100ml",120));
-        priceItems.add(new CategoryItem.PriceItem("200ml",170));
-        priceItems.add(new CategoryItem.PriceItem("500ml",220));
+    }
 
-        // TODO: REMOVE THE PRICE FROM HERE
-        list.add(new CategoryItem("AMREE PLUS CAPSULE 20","Tablets",5,priceItems));
-        list.add(new CategoryItem("AMREE PLUS CAPSULE 21","Syrups",10,priceItems));
-        list.add(new CategoryItem("AMREE PLUS CAPSULE 22","Tablets",14,priceItems));
-        list.add(new CategoryItem("AMREE PLUS CAPSULE 23","Syrups",19,priceItems));
-        list.add(new CategoryItem("AMREE PLUS CAPSULE 24","Tablets",80,priceItems));
+    public void getTheCategoryItemsFromServer(String categoryName,int limit,int page){
+        Retrofit retrofit = RetrofitClient.getInstance();
+        NetworkAPI networkAPI = retrofit.create(NetworkAPI.class);
 
-        categoryItems.setValue(list);
+        Call<List<CategoryItem>> call = networkAPI.getCategoryItems(categoryName,limit,page);
+        call.enqueue(new Callback<List<CategoryItem>>() {
+            @Override
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
+                List<CategoryItem> items = response.body();
+                categoryItems.setValue(items);
+            }
 
+            @Override
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                Toasty.error(getApplication(),t.getMessage(),Toasty.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
+    }
+
+    public void getTheSearchItemsFromServer(String categoryName,String query,int limit,int page){
+        Retrofit retrofit = RetrofitClient.getInstance();
+        NetworkAPI networkAPI = retrofit.create(NetworkAPI.class);
+
+        Call<List<CategoryItem>> call = networkAPI.searchCategoryItem(page,limit,categoryName,query);
+        call.enqueue(new Callback<List<CategoryItem>>() {
+            @Override
+            public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
+                searchItems.setValue(response.body());
+                Log.i(TAG, "onResponse: " + response.body().size());
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryItem>> call, Throwable t) {
+                Toasty.error(getApplication(),t.getMessage(),Toasty.LENGTH_SHORT)
+                        .show();
+            }
+        });
+    }
+
+    public MutableLiveData<List<CategoryItem>> getSearchItems() {
+        return searchItems;
     }
 
     public Pair<Integer,Integer> getDetails(List<CartItem> cartItems){

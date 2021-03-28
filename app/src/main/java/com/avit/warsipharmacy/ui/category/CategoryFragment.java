@@ -12,11 +12,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,9 +28,12 @@ import com.avit.warsipharmacy.R;
 import com.avit.warsipharmacy.ui.cart.CartFragment;
 import com.avit.warsipharmacy.ui.cart.CartItem;
 import com.avit.warsipharmacy.utility.Utility;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 public class CategoryFragment extends Fragment {
 
@@ -35,6 +42,13 @@ public class CategoryFragment extends Fragment {
     private RecyclerView recyclerView;
     private CategoryAdapter categoryAdapter;
     private TextView itemsCountView, categoryNameView;
+    private int page = 1,limit = 10;
+    private int page_search = 1;
+    private ScrollView scrollView;
+    private ProgressBar bottomProgressBar, mainProgressBar;
+    private boolean requestMoreItems, isSearching;
+    private String search_query;
+    private String TAG = "CategoryFragment";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -44,25 +58,28 @@ public class CategoryFragment extends Fragment {
         categoryViewModel =
                 ViewModelProviders.of(this).get(CategoryViewModel.class);
 
+        scrollView = root.findViewById(R.id.scrollView);
         searchView = root.findViewById(R.id.search_bar);
+        bottomProgressBar = root.findViewById(R.id.progressBar);
+        mainProgressBar = root.findViewById(R.id.mainProgressBar);
+
         searchView.setSubmitButtonEnabled(true);
+        requestMoreItems = true;
+        isSearching = false;
 
         // To hide the keyboard when not required
         Utility.setupUI(root,getContext());
 
         // back Button
-        root.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager()
-                        .popBackStackImmediate();
-            }
-        });
+        root.findViewById(R.id.backButton).setOnClickListener(v -> getFragmentManager()
+                .popBackStackImmediate());
 
         Bundle bundle = getArguments();
         String categoryName = bundle.getString("categoryName");
         categoryNameView = root.findViewById(R.id.categories_heading);
         categoryNameView.setText(categoryName);
+
+        categoryViewModel.getTheCategoryItemsFromServer(categoryName.toLowerCase(),limit,page++);
 
         itemsCountView = root.findViewById(R.id.items_count);
         itemsCountView.setText("0 Items");
@@ -71,17 +88,29 @@ public class CategoryFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
+        // LOADING MORE ELEMENTS IN SCROLL END
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
+            if(scrollView.getHeight() > 300 && requestMoreItems) {
+                View view = scrollView.getChildAt(scrollView.getChildCount() - 1);
+                int bottomDetector = view.getBottom() - (scrollView.getHeight() + scrollView.getScrollY());
+                if (bottomDetector == 0 && mainProgressBar.getVisibility() != View.VISIBLE) {
+                    bottomProgressBar.setVisibility(View.VISIBLE);
+                    if(!isSearching) {
+                        categoryViewModel.getTheCategoryItemsFromServer(categoryName.toLowerCase(), limit, page++);
+                    }else{
+                        categoryViewModel.getTheSearchItemsFromServer(categoryName.toLowerCase(),search_query,limit,page_search++);
+                    }
+                }
+            }
+        });
+
+
         categoryAdapter = new CategoryAdapter(getContext(), new CategoryAdapter.CategoryInterface() {
             @Override
             public void addToCart(CategoryItem categoryItem) {
 
-                List<CategoryItem.PriceItem> priceItems = new ArrayList<>();
-                priceItems.add(new CategoryItem.PriceItem("100ml",300));
-                priceItems.add(new CategoryItem.PriceItem("300ml",500));
-                priceItems.add(new CategoryItem.PriceItem("500ml",800));
-
                 CartItem cartItem = new CartItem(categoryItem.getItemName(),categoryItem.getCategoryName(),0,categoryItem.getDiscount()
-                        ,priceItems);
+                        ,categoryItem.getPriceItems());
                 categoryViewModel.addToCart(cartItem);
 
             }
@@ -103,6 +132,7 @@ public class CategoryFragment extends Fragment {
         categoryViewModel.getCartItemLiveData().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
             @Override
             public void onChanged(List<CartItem> cartItemsList) {
+
                 if(cartItemsList.size() > 0){
                     Pair<Integer,Integer> details = categoryViewModel.getDetails(cartItemsList);
                     showGoToCart(true,details);
@@ -112,21 +142,79 @@ public class CategoryFragment extends Fragment {
             }
         });
 
+        // show category items
         categoryViewModel.getCategoryItems().observe(getViewLifecycleOwner(), new Observer<List<CategoryItem>>() {
             @Override
             public void onChanged(List<CategoryItem> categoryItems) {
-                categoryAdapter.setCategoryItemList(categoryItems);
-                itemsCountView.setText(categoryItems.size() + " Items");
+
+                if(mainProgressBar.getVisibility() == View.VISIBLE){
+                    mainProgressBar.setVisibility(View.GONE);
+                    if(categoryItems.size() == 0){
+                        Toasty.warning(getContext(),"No Items Found",Toasty.LENGTH_SHORT)
+                                .show();
+                    }
+                }
+
+                if(bottomProgressBar.getVisibility() == View.VISIBLE && categoryItems.size() == 0){
+                    requestMoreItems = false;
+                    bottomProgressBar.setVisibility(View.INVISIBLE);
+                }
+
+                if(categoryItems.size() > 0){
+                    bottomProgressBar.setVisibility(View.INVISIBLE);
+                }
+
+                categoryAdapter.addCategoryItems(categoryItems);
+                itemsCountView.setText(categoryAdapter.getItemCount() + " Items");
             }
         });
 
 
-        // TODO: IMPLEMENT SEARCH QUERY LOGIC
+        // show search items
+        categoryViewModel.getSearchItems().observe(getViewLifecycleOwner(), new Observer<List<CategoryItem>>() {
+            @Override
+            public void onChanged(List<CategoryItem> categoryItems) {
+                mainProgressBar.setVisibility(View.INVISIBLE);
+                if(!isSearching){
+                    // Main ProgressBar
+                    isSearching = true;
+                    if(categoryItems.size() == 0){
+                        Toasty.warning(getContext(),"No Items Found",Toasty.LENGTH_SHORT)
+                                .show();
+                    }else{
+                        categoryAdapter.setCategoryItemList(categoryItems);
+                        itemsCountView.setText(categoryAdapter.getItemCount() + " Items");
+                    }
+                }
+                else{
+                    if(bottomProgressBar.getVisibility() == View.VISIBLE && categoryItems.size() == 0) {
+                        requestMoreItems = false;
+                        bottomProgressBar.setVisibility(View.INVISIBLE);
+                        }
+
+                        if(categoryItems.size() > 0){
+                            bottomProgressBar.setVisibility(View.INVISIBLE);
+                        }
+
+                        categoryAdapter.addCategoryItems(categoryItems);
+                        itemsCountView.setText(categoryAdapter.getItemCount() + " Items");
+                }
+
+            }
+        });
+
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getContext(),query,Toast.LENGTH_SHORT)
-                        .show();
+                search_query = query;
+                isSearching = false;
+                page_search = 1;
+                requestMoreItems = true;
+                mainProgressBar.setVisibility(View.VISIBLE);
+                categoryAdapter.clearAllItems();
+
+                categoryViewModel.getTheSearchItemsFromServer(categoryName.toLowerCase(),query,limit,page_search++);
                 return false;
             }
 
@@ -156,6 +244,10 @@ public class CategoryFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Fragment fragment = new CartFragment();
+
+                    BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.nav_view);
+                    bottomNavigationView.getMenu().findItem(R.id.navigation_dashboard).setChecked(true);
+
                     openFragment(fragment,android.R.anim.fade_in,android.R.anim.fade_out);
                 }
             });
