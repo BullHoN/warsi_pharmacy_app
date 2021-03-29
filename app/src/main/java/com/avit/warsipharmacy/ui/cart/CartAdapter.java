@@ -75,7 +75,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // It will execute first time if the value is one
-                // TODO: SET PRICE ACCORDINGLY
                 if(++check[0] > 1){
                     currItem.setSelectedPriceIndex(position);
                     changeCartItemInterface.update(currItem);

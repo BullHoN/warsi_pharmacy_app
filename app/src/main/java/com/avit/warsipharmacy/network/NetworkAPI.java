@@ -1,6 +1,8 @@
 package com.avit.warsipharmacy.network;
 
+import com.avit.warsipharmacy.auth.OtpActivity;
 import com.avit.warsipharmacy.ui.cart.CartItem;
+import com.avit.warsipharmacy.ui.category.CategoryAdapter;
 import com.avit.warsipharmacy.ui.category.CategoryItem;
 import com.avit.warsipharmacy.ui.checkout.UpiDetails;
 import com.avit.warsipharmacy.ui.orders.OrderItem;
@@ -40,5 +42,11 @@ public interface NetworkAPI {
 
      @GET("/order/{customerId}")
      Call<List<OrderItem>> getOrderItems(@Path(value = "customerId") String customerID);
+
+     @POST("/auth/requestOtp/{phoneNo}")
+     Call<String> requestOTP(@Path(value = "phoneNo") String phoneNo);
+
+     @POST("/auth/verifyOtp")
+     Call<Boolean> verifyOTP(@Body OtpActivity.OtpVerifyData otpVerifyData);
 
 }

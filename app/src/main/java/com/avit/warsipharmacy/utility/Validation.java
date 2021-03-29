@@ -26,7 +26,7 @@ public class Validation {
     }
 
     public static boolean phoneNoValidation(String s){
-        if(s.length() > 13 || s.length() < 10){
+        if(s.length() != 10){
             return false;
         }
 

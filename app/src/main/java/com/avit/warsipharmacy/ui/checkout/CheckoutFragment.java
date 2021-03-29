@@ -227,9 +227,11 @@ public class CheckoutFragment extends Fragment {
         Retrofit retrofit = RetrofitClient.getInstance();
         NetworkAPI networkAPI = retrofit.create(NetworkAPI.class);
 
-        // TODO: SET CORRECT DELIVERY PRICE AND FCM ID
-        // TODO: ADD USER ID FROM SHARED PREF
-        OrderItem.CreateOrderData orderData = new OrderItem.CreateOrderData(cartItems,deliveryPrice,isPaid,"skdgnskdgnksdgn","6061692f9de9068198c78d06");
+        // TODO: SET CORRECT FCM ID
+        OrderItem.CreateOrderData orderData = new OrderItem.CreateOrderData(cartItems,deliveryPrice,isPaid,"skdgnskdgnksdgn"
+                ,sharedPreferences.getString(SharedPrefNames.USER_ID,""),userNameView.getText().toString(),buildingNameView.getText().toString()
+                ,mainAddressView.getText().toString(),landmarkView.getText().toString(),pinCodeView.getText().toString());
+
         Call<Boolean> call = networkAPI.createOrder(orderData);
 
         checkoutButton.setClickable(false);

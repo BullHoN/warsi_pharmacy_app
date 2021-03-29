@@ -1,5 +1,7 @@
 package com.avit.warsipharmacy.ui.orders;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avit.warsipharmacy.R;
+import com.avit.warsipharmacy.db.SharedPrefNames;
 import com.avit.warsipharmacy.ui.home.HomeFragment;
 import com.avit.warsipharmacy.ui.order.OrderFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,12 +40,17 @@ public class OrdersFragment extends Fragment {
     private LinearLayout emptyOrdersView;
     private Button exploreButton;
     private ProgressBar progressBar;
+    private SharedPreferences sharedPreferences;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ordersViewModel =
                 ViewModelProviders.of(this).get(OrdersViewModel.class);
         View root = inflater.inflate(R.layout.fragment_orders, container, false);
+
+        sharedPreferences = getActivity().getSharedPreferences(SharedPrefNames.SHARED_PREFRENCE_DATABASE_NAME, Context.MODE_PRIVATE);
+        ordersViewModel.getOrderItemsFromServer(sharedPreferences.getString(SharedPrefNames.USER_ID,""));
+
 
         emptyOrdersView = root.findViewById(R.id.emptyOrders);
         exploreButton = root.findViewById(R.id.explore);

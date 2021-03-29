@@ -60,7 +60,6 @@ public class HomeFragment extends Fragment {
 
         progressBar = root.findViewById(R.id.progressBar);
 
-        // TODO: DO SOMETHING ON USER PROFILE BUTTON
         root.findViewById(R.id.user_profile_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +68,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // TODO: DO SOMETHING ON SEARCH BUTTON
         root.findViewById(R.id.search_bar_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +76,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // TODO: DO SOMETHING ON UPLOAD PRESCRIPTION BUTTON
         root.findViewById(R.id.upload_prescription_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +84,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // TODO: UPLOAD PRESCRIPTION WITH IMAGE
         root.findViewById(R.id.upload_prescription_image_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

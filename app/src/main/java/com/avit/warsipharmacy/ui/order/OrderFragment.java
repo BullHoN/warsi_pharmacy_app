@@ -1,5 +1,7 @@
 package com.avit.warsipharmacy.ui.order;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.avit.warsipharmacy.R;
+import com.avit.warsipharmacy.db.SharedPrefNames;
 import com.avit.warsipharmacy.ui.checkout.CheckoutOrderItemsAdapter;
 import com.avit.warsipharmacy.ui.orders.OrderItem;
 import com.google.gson.Gson;
@@ -28,6 +31,7 @@ public class OrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_order, container, false);
+
 
         orderItemsView = root.findViewById(R.id.orderItemsList);
         deliveryPriceView = root.findViewById(R.id.delivery_charge);
@@ -51,6 +55,8 @@ public class OrderFragment extends Fragment {
 
         String orderItemString = bundle.getString("orderItem");
         currOrderItem = gson.fromJson(orderItemString,OrderItem.class);
+
+
 
         orderItemsView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
         CheckoutOrderItemsAdapter adapter = new CheckoutOrderItemsAdapter(getContext());

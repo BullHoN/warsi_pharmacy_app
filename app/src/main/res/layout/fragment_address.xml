@@ -188,6 +188,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phoneNo"
                     android:inputType="phone"
+                    android:editable="false"
+                    android:focusable="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

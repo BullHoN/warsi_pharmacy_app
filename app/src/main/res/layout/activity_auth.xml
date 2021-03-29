@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/mainView"
+    android:background="@color/colorPrimary"
+    style="@style/defaultPadding"
+    tools:context=".auth.AuthActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:src="@drawable/logo"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <View
+            android:layout_marginTop="8dp"
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"/>
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Enter your phone no"
+            android:textColor="@android:color/white"
+            android:textSize="22sp" />
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:text="You will receive a 4 digit code to verify next"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_marginTop="24dp"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="18sp"
+                android:paddingVertical="16dp"
+                android:paddingHorizontal="16dp"
+                android:background="@drawable/search_back"
+                android:text="+91"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/phoneNo"
+                android:paddingVertical="16dp"
+                android:paddingHorizontal="16dp"
+                android:layout_marginLeft="12dp"
+                android:inputType="number"
+                android:background="@drawable/search_back"
+                android:layout_width="0dp"
+                android:hint="Enter Phone Number"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sendOtp"
+            android:layout_gravity="center"
+            android:paddingHorizontal="22dp"
+            android:paddingVertical="12dp"
+            android:layout_marginTop="24dp"
+            android:layout_width="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            android:background="@drawable/sendotp_back"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto_medium"
+                android:text="SEND OTP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_marginLeft="12dp"
+                android:background="@drawable/otp_circle"
+                android:orientation="horizontal"
+                android:layout_width="30dp"
+                android:layout_height="30dp" >
+
+                <ImageView
+                    android:src="@drawable/ic_baseline_arrow_right_24"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        app:indicatorColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

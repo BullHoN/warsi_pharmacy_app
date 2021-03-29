@@ -24,7 +24,6 @@ public class CartItem{
     @TypeConverters(PriceItemConvertor.class)
     private List<CategoryItem.PriceItem> priceItems;
 
-    // TODO: ADD NEW FIELD itemID
     private String itemId;
 
 

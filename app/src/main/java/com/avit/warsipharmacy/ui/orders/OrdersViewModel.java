@@ -32,7 +32,7 @@ public class OrdersViewModel extends AndroidViewModel {
         super(application);
 
         orderItemMutableLiveData = new MutableLiveData<>();
-        getOrderItemsFromServer();
+//        getOrderItemsFromServer();
 //
 //        List<CartItem> cartItems = new ArrayList<>();
 //        List<CategoryItem.PriceItem> priceItems = new ArrayList<>();
@@ -46,7 +46,7 @@ public class OrdersViewModel extends AndroidViewModel {
 //        cartItems.add(new CartItem("zeher 3","sgsdg",2,27,priceItems,"virjojjeovj"));
 //
 //
-//        // TODO: GET THE DATA FROM THE SERVER
+//
 //        List<OrderItem> orderItems = new ArrayList<>();
 //        orderItems.add(new OrderItem("sdfsgsgddsg",new Date(),cartItems,0,25));
 //        orderItems.add(new OrderItem("asfaiwrjwie",new Date(),cartItems,1,0));
@@ -56,12 +56,11 @@ public class OrdersViewModel extends AndroidViewModel {
 //        orderItemMutableLiveData.setValue(orderItems);
     }
 
-    private void getOrderItemsFromServer(){
+    public void getOrderItemsFromServer(String userId){
         Retrofit retrofit = RetrofitClient.getInstance();
         NetworkAPI networkAPI = retrofit.create(NetworkAPI.class);
 
-        // TODO: PUT CORRECT CUSTOMER ID
-        Call<List<OrderItem>> call = networkAPI.getOrderItems("6061692f9de9068198c78d06");
+        Call<List<OrderItem>> call = networkAPI.getOrderItems(userId);
         call.enqueue(new Callback<List<OrderItem>>() {
             @Override
             public void onResponse(Call<List<OrderItem>> call, Response<List<OrderItem>> response) {

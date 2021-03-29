@@ -83,13 +83,49 @@ public class OrderItem {
         private String customerFCMID;
         private String userId;
 
-        public CreateOrderData(List<CartItem> orderItems, int deliveryPrice, boolean isPaid
-                , String customerFCMID, String userId) {
+        // user details
+        private String name,buildingName,mainAddress,landMark,pinCode;
+
+//        public CreateOrderData(List<CartItem> orderItems, int deliveryPrice, boolean isPaid
+//                , String customerFCMID, String userId) {
+//            this.orderItems = orderItems;
+//            this.deliveryPrice = deliveryPrice;
+//            this.isPaid = isPaid;
+//            this.customerFCMID = customerFCMID;
+//            this.userId = userId;
+//        }
+
+        public CreateOrderData(List<CartItem> orderItems, int deliveryPrice, boolean isPaid, String customerFCMID, String userId, String name, String buildingName, String mainAddress, String landMark, String pinCode) {
             this.orderItems = orderItems;
             this.deliveryPrice = deliveryPrice;
             this.isPaid = isPaid;
             this.customerFCMID = customerFCMID;
             this.userId = userId;
+            this.name = name;
+            this.buildingName = buildingName;
+            this.mainAddress = mainAddress;
+            this.landMark = landMark;
+            this.pinCode = pinCode;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getBuildingName() {
+            return buildingName;
+        }
+
+        public String getMainAddress() {
+            return mainAddress;
+        }
+
+        public String getLandMark() {
+            return landMark;
+        }
+
+        public String getPinCode() {
+            return pinCode;
         }
 
         public String getUserId() {
