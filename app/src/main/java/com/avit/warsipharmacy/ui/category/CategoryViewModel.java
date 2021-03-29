@@ -102,7 +102,7 @@ public class CategoryViewModel extends AndroidViewModel {
         return new Pair<>(total_amount,total_save);
     }
 
-    boolean isPresentInCart(CategoryItem categoryItem){
+    public boolean isPresentInCart(CategoryItem categoryItem){
         return cartRepository.findCartItem(categoryItem.getItemName());
     }
 

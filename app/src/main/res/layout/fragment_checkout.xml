@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:isScrollContainer="true"
     android:fillViewport="true"
+    android:isScrollContainer="true"
     tools:context=".ui.checkout.CheckoutFragment">
 
     <RelativeLayout
@@ -64,24 +64,24 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/roboto_medium"
                     android:text="Your Details"
                     android:textColor="@color/primaryText"
-                    android:layout_marginBottom="24dp"
                     android:textSize="22sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Name"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/user_name"
-                        android:inputType="textPersonName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
                         android:text="Vaibhav Bhardwaj" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -89,46 +89,46 @@
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="Door No. Building Name"
-                app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
                     android:id="@+id/buildingName"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="Main Address"
-                app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
                     android:id="@+id/main_address"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="Landmark (Optional)"
-                app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
                     android:id="@+id/landmark"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -140,12 +140,12 @@
                 android:weightSum="2">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:layout_weight="1"
-                    android:hint="City"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    android:hint="City">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -157,19 +157,19 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:layout_weight="1"
                     android:hint="Pincode"
-                    app:errorEnabled="true"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
                         android:id="@+id/pincode"
-                        android:inputType="number"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -177,27 +177,27 @@
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="Phone Number"
-                app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phoneNo"
-                    android:inputType="phone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="phone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_below="@id/user_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/user_details"
             android:orientation="vertical">
 
             <TextView
@@ -212,76 +212,84 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/cartOrderItemsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:nestedScrollingEnabled="false"
-                android:layout_width="match_parent"
-                tools:listitem="@layout/checkout_order_item"
                 tools:itemCount="2"
-                android:layout_height="wrap_content"/>
+                tools:listitem="@layout/checkout_order_item" />
 
             <LinearLayout
-                android:paddingHorizontal="5dp"
                 android:layout_width="match_parent"
-                android:weightSum="2"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingHorizontal="5dp"
+                android:weightSum="2">
 
                 <TextView
-                    android:text="Delivery Charge"
-                    android:layout_weight="2"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:fontFamily="@font/roboto_medium"
-                    android:textSize="16sp"
-                    android:layout_height="wrap_content"/>
+                    android:text="Delivery Charge"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/delivery_charge"
-                    android:text="₹5"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="16sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="₹5"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:paddingHorizontal="5dp"
                 android:layout_width="match_parent"
-                android:weightSum="2"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingHorizontal="5dp"
+                android:weightSum="2">
 
                 <TextView
-                    android:text="Total Price"
-                    android:layout_weight="2"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:fontFamily="@font/roboto_medium"
-                    android:textSize="22sp"
-                    android:layout_height="wrap_content"/>
+                    android:text="Total Price"
+                    android:textSize="22sp" />
 
                 <TextView
                     android:id="@+id/total_price"
-                    android:text="₹5"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="22sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="₹5"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="22sp" />
 
             </LinearLayout>
 
+            <ProgressBar
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
             <Button
                 android:id="@+id/checkout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:textColor="@android:color/white"
                 android:background="@drawable/add_button_back"
                 android:text="Checkout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:textColor="@android:color/white" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp" />
 
         </LinearLayout>
 

@@ -65,6 +65,13 @@
                 android:textColor="@color/primaryText"
                 android:textSize="22sp" />
 
+            <ProgressBar
+                android:layout_marginTop="24dp"
+                android:id="@+id/recommendationProgressBar"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recommendation_items"
                 android:layout_width="match_parent"
@@ -74,6 +81,7 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="4"
                 tools:listitem="@layout/category_item" />
+
 
             <Button
                 android:layout_marginTop="24dp"

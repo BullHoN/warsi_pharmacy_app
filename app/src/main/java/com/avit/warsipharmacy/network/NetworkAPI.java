@@ -1,11 +1,16 @@
 package com.avit.warsipharmacy.network;
 
+import com.avit.warsipharmacy.ui.cart.CartItem;
 import com.avit.warsipharmacy.ui.category.CategoryItem;
+import com.avit.warsipharmacy.ui.checkout.UpiDetails;
+import com.avit.warsipharmacy.ui.orders.OrderItem;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -24,5 +29,16 @@ public interface NetworkAPI {
      @GET("/categories/all")
      Call<List<CategoryItem>> searchCategoryItem(@Query("page") int page,@Query("limit") int limit,@Query("category") String category,@Query("query") String query);
 
+     @POST("/order/newOrder")
+     Call<Boolean> createOrder(@Body OrderItem.CreateOrderData createOrderData);
+
+     @GET("/order/deliveryPrice")
+     Call<Integer> getDeliveryPrice();
+
+     @GET("/order/upiDetails")
+     Call<UpiDetails> getUpiDetails();
+
+     @GET("/order/{customerId}")
+     Call<List<OrderItem>> getOrderItems(@Path(value = "customerId") String customerID);
 
 }

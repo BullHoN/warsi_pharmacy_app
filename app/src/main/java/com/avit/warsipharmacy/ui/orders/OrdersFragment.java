@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,7 @@ public class OrdersFragment extends Fragment {
     private Gson gson;
     private LinearLayout emptyOrdersView;
     private Button exploreButton;
+    private ProgressBar progressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class OrdersFragment extends Fragment {
 
         emptyOrdersView = root.findViewById(R.id.emptyOrders);
         exploreButton = root.findViewById(R.id.explore);
+        progressBar = root.findViewById(R.id.progressBar);
 
         exploreButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,9 +84,9 @@ public class OrdersFragment extends Fragment {
             @Override
             public void onChanged(List<OrderItem> orderItems) {
 
-                if(orderItems.size() > 0){
-                    emptyOrdersView.setVisibility(View.INVISIBLE);
-                }else{
+                progressBar.setVisibility(View.GONE);
+
+                if(orderItems.size() <= 0){
                     emptyOrdersView.setVisibility(View.VISIBLE);
                 }
 

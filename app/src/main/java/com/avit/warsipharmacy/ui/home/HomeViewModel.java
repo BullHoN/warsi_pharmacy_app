@@ -58,6 +58,9 @@ public class HomeViewModel extends AndroidViewModel {
             @Override
             public void onResponse(Call<List<CategoryItem>> call, Response<List<CategoryItem>> response) {
                 List<CategoryItem> categoryItems  = response.body();
+                for(CategoryItem categoryItem : categoryItems){
+                    Log.i(TAG, "onResponse: " + categoryItem.get_id());
+                }
                 listMutableLiveData.setValue(categoryItems);
             }
 

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private List<Pair<String,Integer>> list;
     private String TAG = "HomeFragment";
+    private ProgressBar progressBar;
 
     // TODO: TAKE IMAGES FROM SERVER
     int[] sampleImages = {R.drawable.banner1, R.drawable.banner2, R.drawable.banner1, R.drawable.banner4, R.drawable.banner2};
@@ -55,6 +57,8 @@ public class HomeFragment extends Fragment {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        progressBar = root.findViewById(R.id.progressBar);
 
         // TODO: DO SOMETHING ON USER PROFILE BUTTON
         root.findViewById(R.id.user_profile_button).setOnClickListener(new View.OnClickListener() {
@@ -122,7 +126,6 @@ public class HomeFragment extends Fragment {
         DisplayCategoriesAdapter displayCategoriesAdapter = new DisplayCategoriesAdapter(list, getContext(), new DisplayCategoriesAdapter.DisplayCategoryOnClickListener() {
             @Override
             public void onItemClick(int position) {
-                //TODO: PASS THE DATA TO Category Fragment
                 Fragment categoryFragment = new CategoryFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("categoryName",list.get(position).first);
@@ -143,13 +146,8 @@ public class HomeFragment extends Fragment {
         CategoryAdapter topSellingAdapter = new CategoryAdapter(getContext(), new CategoryAdapter.CategoryInterface() {
             @Override
             public void addToCart(CategoryItem categoryItem) {
-                List<CategoryItem.PriceItem> priceItems = new ArrayList<>();
-                priceItems.add(new CategoryItem.PriceItem("100ml",300));
-                priceItems.add(new CategoryItem.PriceItem("300ml",500));
-                priceItems.add(new CategoryItem.PriceItem("500ml",800));
-
                 CartItem cartItem = new CartItem(categoryItem.getItemName(),categoryItem.getCategoryName(),0,categoryItem.getDiscount()
-                        ,priceItems);
+                        ,categoryItem.getPriceItems(),categoryItem.get_id());
                 homeViewModel.addToCart(cartItem);
             }
 
@@ -168,6 +166,9 @@ public class HomeFragment extends Fragment {
         homeViewModel.getListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<List<CategoryItem>>() {
             @Override
             public void onChanged(List<CategoryItem> topSellingItems) {
+                if(topSellingItems.size() > 0){
+                    progressBar.setVisibility(View.GONE);
+                }
                 topSellingAdapter.setCategoryItemList(topSellingItems);
             }
         });

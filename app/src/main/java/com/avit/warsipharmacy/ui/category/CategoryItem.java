@@ -6,22 +6,20 @@ public class CategoryItem {
     private String itemName;
     private String categoryName;
     private int discount;
-//    private int price;
     private List<PriceItem> priceItems;
+    private String _id;
 
-//    OLD CONSTRUCTOR
-//    public CategoryItem(String itemName, String categoryName, int discount, int price) {
-//        this.itemName = itemName;
-//        this.categoryName = categoryName;
-//        this.discount = discount;
-//        this.price = price;
-//    }
 
-    public CategoryItem(String itemName, String categoryName, int discount,List<PriceItem> priceItems) {
+    public CategoryItem(String itemName, String categoryName, int discount, List<PriceItem> priceItems, String _id) {
         this.itemName = itemName;
         this.categoryName = categoryName;
         this.discount = discount;
         this.priceItems = priceItems;
+        this._id = _id;
+    }
+
+    public String get_id() {
+        return _id;
     }
 
     public List<PriceItem> getPriceItems() {

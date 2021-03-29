@@ -2,6 +2,7 @@ package com.avit.warsipharmacy.ui.orders;
 
 import com.avit.warsipharmacy.ui.cart.CartItem;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class OrderItem {
         this.status = status;
         this.deliveryPrice = deliveryPrice;
     }
+
+
 
     public int getDeliveryPrice() {
         return deliveryPrice;
@@ -59,6 +62,55 @@ public class OrderItem {
 
     public int getStatus() {
         return status;
+    }
+
+    public static class OrderItemsclass{
+        private List<CartItem> orderItems;
+
+        public OrderItemsclass(List<CartItem> orderItems) {
+            this.orderItems = orderItems;
+        }
+
+        public List<CartItem> getOrderItems() {
+            return orderItems;
+        }
+    }
+
+    public static class CreateOrderData{
+        private List<CartItem> orderItems;
+        private int deliveryPrice;
+        private boolean isPaid;
+        private String customerFCMID;
+        private String userId;
+
+        public CreateOrderData(List<CartItem> orderItems, int deliveryPrice, boolean isPaid
+                , String customerFCMID, String userId) {
+            this.orderItems = orderItems;
+            this.deliveryPrice = deliveryPrice;
+            this.isPaid = isPaid;
+            this.customerFCMID = customerFCMID;
+            this.userId = userId;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public List<CartItem> getOrderItems() {
+            return orderItems;
+        }
+
+        public int getDeliveryPrice() {
+            return deliveryPrice;
+        }
+
+        public boolean isPaid() {
+            return isPaid;
+        }
+
+        public String getCustomerFCMID() {
+            return customerFCMID;
+        }
     }
 
 }

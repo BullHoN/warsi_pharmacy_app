@@ -24,16 +24,30 @@ public class CartItem{
     @TypeConverters(PriceItemConvertor.class)
     private List<CategoryItem.PriceItem> priceItems;
 
+    // TODO: ADD NEW FIELD itemID
+    private String itemId;
 
-    // TODO: REMOVE POSSIBLE VALUES, PRICE AND CHANGE NoOFItems TO SELECTEDITEMINDEX
 
-    public CartItem(String itemName, String categoryName, int selectedPriceIndex, int discount
-            , List<CategoryItem.PriceItem> priceItems) {
+//    public CartItem(String itemName, String categoryName, int selectedPriceIndex, int discount
+//            , List<CategoryItem.PriceItem> priceItems) {
+//        this.itemName = itemName;
+//        this.categoryName = categoryName;
+//        this.selectedPriceIndex = selectedPriceIndex;
+//        this.discount = discount;
+//        this.priceItems = priceItems;
+//    }
+
+    public CartItem(String itemName, String categoryName, int selectedPriceIndex, int discount, List<CategoryItem.PriceItem> priceItems, String itemId) {
         this.itemName = itemName;
         this.categoryName = categoryName;
         this.selectedPriceIndex = selectedPriceIndex;
         this.discount = discount;
         this.priceItems = priceItems;
+        this.itemId = itemId;
+    }
+
+    public String getItemId() {
+        return itemId;
     }
 
     public List<CategoryItem.PriceItem> getPriceItems() {

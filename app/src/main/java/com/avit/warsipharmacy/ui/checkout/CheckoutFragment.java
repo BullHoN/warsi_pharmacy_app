@@ -3,8 +3,12 @@ package com.avit.warsipharmacy.ui.checkout;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -18,19 +22,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.avit.warsipharmacy.R;
+import com.avit.warsipharmacy.db.SharedPrefNames;
+import com.avit.warsipharmacy.network.NetworkAPI;
+import com.avit.warsipharmacy.network.RetrofitClient;
 import com.avit.warsipharmacy.ui.cart.CartItem;
 import com.avit.warsipharmacy.ui.cart.CartViewModel;
+import com.avit.warsipharmacy.ui.orders.OrderItem;
 import com.avit.warsipharmacy.ui.success.SuccessFragment;
 import com.avit.warsipharmacy.utility.Utility;
 import com.avit.warsipharmacy.utility.Validation;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import static android.app.Activity.RESULT_OK;
 
 public class CheckoutFragment extends Fragment {
 
@@ -40,6 +56,13 @@ public class CheckoutFragment extends Fragment {
     private TextView deliveryChargeView,totalPriceView;
     private String TAG = "CheckoutFragment";
     private TextInputEditText userNameView,buildingNameView,mainAddressView,landmarkView,pinCodeView,phoneNoView;
+    private SharedPreferences sharedPreferences;
+    private List<CartItem> cartItems;
+    private Gson gson;
+    private ProgressBar progressBar;
+    final int UPI_PAYMENT = 16;
+    private int deliveryPrice;
+    private UpiDetails upiDetails;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +71,10 @@ public class CheckoutFragment extends Fragment {
         checkoutViewModel =
                 ViewModelProviders.of(this).get(CheckoutViewModel.class);
 
+        sharedPreferences = getActivity().getSharedPreferences(SharedPrefNames.SHARED_PREFRENCE_DATABASE_NAME,Context.MODE_PRIVATE);
+        gson = new Gson();
+
+        progressBar = root.findViewById(R.id.progressBar);
         deliveryChargeView = root.findViewById(R.id.delivery_charge);
         totalPriceView = root.findViewById(R.id.total_price);
         userNameView = root.findViewById(R.id.user_name);
@@ -58,7 +85,30 @@ public class CheckoutFragment extends Fragment {
         phoneNoView = root.findViewById(R.id.phoneNo);
 
 
+        getFromSharedPref();
         Utility.setupUI(root,getContext());
+
+        Bundle bundle = getArguments();
+        String cartItemString = bundle.getString("cartItems");
+        OrderItem.OrderItemsclass orderItemsclass = gson.fromJson(cartItemString, OrderItem.OrderItemsclass.class);
+        cartItems = orderItemsclass.getOrderItems();
+
+        // Upi Details
+        checkoutViewModel.getUpiDetailsMutableLiveData().observe(getViewLifecycleOwner(), new Observer<UpiDetails>() {
+            @Override
+            public void onChanged(UpiDetails upidet) {
+                upiDetails = upidet;
+            }
+        });
+
+        // delivery price
+        checkoutViewModel.getDeliveryPrice().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                deliveryPrice = integer;
+                deliveryChargeView.setText("₹" + deliveryPrice);
+            }
+        });
 
         // Back Button
         root.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
@@ -84,13 +134,18 @@ public class CheckoutFragment extends Fragment {
             }
         });
 
-        // TODO: CHECKOUT BUTTON
+        //  CHECKOUT BUTTON
         checkoutButton = root.findViewById(R.id.checkout);
         checkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: SAVE TO SHAREDPREF AFTER SUBMITTED
                 if(!isValid()){
+                    return;
+                }
+
+                if(deliveryPrice == -1){
+                    Toasty.error(getContext(),"Please try again later",Toasty.LENGTH_SHORT)
+                            .show();
                     return;
                 }
 
@@ -124,25 +179,106 @@ public class CheckoutFragment extends Fragment {
         payWithUPIButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: START UPI PAYMENT
                 alertDialog.dismiss();
-                // TODO: REMOVE THIS METHOD
-                tempSuccess();
+                upiPayment();
             }
         });
 
         payWithCOD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: START COD PAYMENT
                 alertDialog.dismiss();
-                // TODO: REMOVE THIS METHOD
-                tempSuccess();
+                sendDataToServer(false);
             }
         });
 
         alertDialog.show();
 
+    }
+
+    private void upiPayment(){
+        int total = calclulateTotal(cartItems);
+
+        Uri uri = Uri.parse("upi://pay").buildUpon()
+                .appendQueryParameter("pa", upiDetails.getUpiId())
+                .appendQueryParameter("pn", upiDetails.getUpiName())
+                .appendQueryParameter("tr", "25584584")
+                .appendQueryParameter("am", String.valueOf(total))
+                .appendQueryParameter("cu", "INR")
+                .build();
+
+
+        Intent upiPayIntent = new Intent(Intent.ACTION_VIEW);
+
+        upiPayIntent.setData(uri);
+
+        Intent chooser = Intent.createChooser(upiPayIntent, "Pay with");
+        // check if intent resolves
+        if(null !=  chooser.resolveActivity(getContext().getPackageManager()))  {
+            startActivityForResult(chooser, UPI_PAYMENT);
+        } else {
+            Toast.makeText(getContext(),"No UPI app found, please install one to continue",Toast.LENGTH_SHORT)
+                    .show();
+        }
+
+    }
+
+    private void sendDataToServer(boolean isPaid){
+        Retrofit retrofit = RetrofitClient.getInstance();
+        NetworkAPI networkAPI = retrofit.create(NetworkAPI.class);
+
+        // TODO: SET CORRECT DELIVERY PRICE AND FCM ID
+        // TODO: ADD USER ID FROM SHARED PREF
+        OrderItem.CreateOrderData orderData = new OrderItem.CreateOrderData(cartItems,deliveryPrice,isPaid,"skdgnskdgnksdgn","6061692f9de9068198c78d06");
+        Call<Boolean> call = networkAPI.createOrder(orderData);
+
+        checkoutButton.setClickable(false);
+        progressBar.setVisibility(View.VISIBLE);
+
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                Boolean res = response.body();
+                if(!res){
+                    Toasty.error(getContext(),"Order failed please try again later",Toasty.LENGTH_LONG)
+                            .show();
+                    checkoutButton.setClickable(true);
+                }else{
+                    progressBar.setVisibility(View.GONE);
+                    onPaymentSucessfull();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Toasty.error(getContext(),t.getMessage(),Toasty.LENGTH_SHORT)
+                        .show();
+                checkoutButton.setClickable(true);
+            }
+        });
+
+    }
+
+    private void getFromSharedPref(){
+        userNameView.setText(sharedPreferences.getString(SharedPrefNames.USER_NAME,""));
+        buildingNameView.setText(sharedPreferences.getString(SharedPrefNames.BUILDING_NAME,""));
+        mainAddressView.setText(sharedPreferences.getString(SharedPrefNames.MAIN_ADDRESS,""));
+        landmarkView.setText(sharedPreferences.getString(SharedPrefNames.LANDMARK,""));
+        pinCodeView.setText(sharedPreferences.getString(SharedPrefNames.PINCODE,""));
+        phoneNoView.setText(sharedPreferences.getString(SharedPrefNames.PHONE_NUMBER,""));
+    }
+
+    private void saveToSharedPref(){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(SharedPrefNames.USER_NAME,userNameView.getText().toString());
+        editor.putString(SharedPrefNames.BUILDING_NAME,buildingNameView.getText().toString());
+        editor.putString(SharedPrefNames.MAIN_ADDRESS,mainAddressView.getText().toString());
+        editor.putString(SharedPrefNames.LANDMARK,landmarkView.getText().toString());
+        editor.putString(SharedPrefNames.PINCODE,pinCodeView.getText().toString());
+        editor.putString(SharedPrefNames.PHONE_NUMBER,phoneNoView.getText().toString());
+
+        editor.apply();
     }
 
     private boolean isValid(){
@@ -181,10 +317,14 @@ public class CheckoutFragment extends Fragment {
             return false;
         }
 
+        saveToSharedPref();
         return true;
     }
 
-    public void tempSuccess(){
+    public void onPaymentSucessfull(){
+
+        checkoutViewModel.clearCart();
+
         Toasty.success(getContext(),"Success !!",Toasty.LENGTH_SHORT)
                 .show();
 
@@ -221,4 +361,29 @@ public class CheckoutFragment extends Fragment {
         return total;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == UPI_PAYMENT){
+            if((resultCode == RESULT_OK || resultCode == 11)){
+                if(data != null && data.getStringExtra("response") != null) {
+                    String upiResponse = data.getStringExtra("response").toLowerCase();
+                    if (upiResponse.contains("success")) {
+                        sendDataToServer(true);
+                    } else {
+                        Toasty.error(getContext(), "Payment failed", Toasty.LENGTH_SHORT)
+                                .show();
+                    }
+                }else{
+                    Toasty.error(getContext(), "Payment failed", Toasty.LENGTH_SHORT)
+                            .show();
+                }
+            }else{
+                Toasty.error(getContext(), "Payment failed", Toasty.LENGTH_SHORT)
+                        .show();
+            }
+        }
+
+    }
 }

@@ -43,7 +43,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderItemV
     public void onBindViewHolder(@NonNull OrderItemViewHolder holder, int position) {
         final OrderItem currItem = orderItemList.get(position);
 
-        holder.orderIdView.setText(currItem.getOrder_id());
+        holder.orderIdView.setText("OrderID: " + currItem.getOrder_id());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         holder.orderDateView.setText(simpleDateFormat.format(currItem.getOrder_date()));

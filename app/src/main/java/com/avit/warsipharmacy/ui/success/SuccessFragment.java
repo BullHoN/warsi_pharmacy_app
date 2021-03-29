@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.avit.warsipharmacy.R;
 import com.avit.warsipharmacy.ui.orders.OrdersFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class SuccessFragment extends Fragment {
 
@@ -46,6 +47,10 @@ public class SuccessFragment extends Fragment {
                             .popBackStack();
 
                     Fragment fragment = new OrdersFragment();
+
+                    BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.nav_view);
+                    bottomNavigationView.getMenu().findItem(R.id.navigation_notifications).setChecked(true);
+
                     openFragment(fragment,android.R.anim.fade_in,android.R.anim.fade_out);
                 }
             });

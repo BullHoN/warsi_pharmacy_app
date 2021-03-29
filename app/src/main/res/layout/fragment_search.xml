@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
+    android:id="@+id/scrollView"
     tools:context=".ui.search.SearchFragment">
 
     <RelativeLayout
@@ -12,31 +13,82 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-                <ImageButton
-                    android:id="@+id/backButton"
-                    android:background="@drawable/left_arrow_icon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"/>
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/left_arrow_icon" />
 
-                <androidx.appcompat.widget.SearchView
-                    android:layout_marginTop="16dp"
-                    app:iconifiedByDefault="false"
-                    android:layout_below="@id/backButton"
-                    android:id="@+id/search_bar"
-                    android:paddingVertical="12dp"
-                    android:background="@drawable/search_back"
-                    android:backgroundTint="@color/softColor"
-                    app:searchIcon="@drawable/search_icon"
-                    app:queryBackground="@android:color/transparent"
-                    app:submitBackground="@android:color/transparent"
-                    app:queryHint="Search for medicines"
-                    app:searchHintIcon="@drawable/search_icon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/backButton"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/search_back"
+            android:backgroundTint="@color/softColor"
+            android:paddingVertical="12dp"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@android:color/transparent"
+            app:queryHint="Search for medicines"
+            app:searchHintIcon="@drawable/search_icon"
+            app:searchIcon="@drawable/search_icon"
+            app:submitBackground="@android:color/transparent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search_bar"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/items_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="0 Items Found"
+                android:textColor="@color/secondaryColor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/primaryText" />
+
+            <androidx.recyclerview.widget.RecyclerView
+
+                android:id="@+id/categories_list_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="3"
+                tools:listitem="@layout/category_item" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="50dp"
+                android:visibility="invisible" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/mainProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
 
 
     </RelativeLayout>
-
 
 
 </ScrollView>

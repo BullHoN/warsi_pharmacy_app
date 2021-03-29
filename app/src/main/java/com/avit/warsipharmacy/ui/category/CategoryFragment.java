@@ -113,7 +113,7 @@ public class CategoryFragment extends Fragment {
             public void addToCart(CategoryItem categoryItem) {
 
                 CartItem cartItem = new CartItem(categoryItem.getItemName(),categoryItem.getCategoryName(),0,categoryItem.getDiscount()
-                        ,categoryItem.getPriceItems());
+                        ,categoryItem.getPriceItems(),categoryItem.get_id());
                 categoryViewModel.addToCart(cartItem);
 
             }
@@ -184,6 +184,7 @@ public class CategoryFragment extends Fragment {
                     if(categoryItems.size() == 0){
                         Toasty.warning(getContext(),"No Items Found",Toasty.LENGTH_SHORT)
                                 .show();
+                        itemsCountView.setText(categoryAdapter.getItemCount() + " Items");
                     }else{
                         categoryAdapter.setCategoryItemList(categoryItems);
                         itemsCountView.setText(categoryAdapter.getItemCount() + " Items");
