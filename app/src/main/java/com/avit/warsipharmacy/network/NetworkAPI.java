@@ -6,13 +6,17 @@ import com.avit.warsipharmacy.ui.category.CategoryAdapter;
 import com.avit.warsipharmacy.ui.category.CategoryItem;
 import com.avit.warsipharmacy.ui.checkout.UpiDetails;
 import com.avit.warsipharmacy.ui.orders.OrderItem;
+import com.avit.warsipharmacy.ui.prescription.PrescriptionFragment;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -40,7 +44,7 @@ public interface NetworkAPI {
      @GET("/order/upiDetails")
      Call<UpiDetails> getUpiDetails();
 
-     @GET("/order/{customerId}")
+     @GET("/order/user/{customerId}")
      Call<List<OrderItem>> getOrderItems(@Path(value = "customerId") String customerID);
 
      @POST("/auth/requestOtp/{phoneNo}")
@@ -48,5 +52,9 @@ public interface NetworkAPI {
 
      @POST("/auth/verifyOtp")
      Call<Boolean> verifyOTP(@Body OtpActivity.OtpVerifyData otpVerifyData);
+
+     @Multipart
+     @POST("/prescription/upload")
+     Call<Boolean> sendPrescription(@Part MultipartBody.Part prescriptionImage, @Part("data") PrescriptionFragment.PrescriptionUploadData data);
 
 }

@@ -40,7 +40,6 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
-        // TODO: LOGOUT
         root.findViewById(R.id.signOut).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -52,7 +52,6 @@ public class CategoriesFragment extends Fragment {
         displayCategoriesAdapter = new DisplayCategoriesAdapter(categoriesItems, getContext(), new DisplayCategoriesAdapter.DisplayCategoryOnClickListener() {
             @Override
             public void onItemClick(int position) {
-                //TODO: PASS THE DATA TO Category Fragment
                 Fragment categoryFragment = new CategoryFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("categoryName",categoriesItems.get(position).first);

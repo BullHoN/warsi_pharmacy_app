@@ -77,7 +77,6 @@ public class OtpActivity extends AppCompatActivity {
 
         phoneNoView.setText("OTP is sent to +91" + phoneNo);
 
-        // TODO: REQUEST AGAIN
         requestAgainView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

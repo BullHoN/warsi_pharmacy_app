@@ -9,4 +9,5 @@ public class SharedPrefNames {
     public static String LANDMARK = "landmark";
     public static String PINCODE = "pincode";
     public static String PHONE_NUMBER = "phoneNo";
+    public static String FCM_ID = "fcmID";
 }

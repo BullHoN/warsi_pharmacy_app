@@ -227,8 +227,7 @@ public class CheckoutFragment extends Fragment {
         Retrofit retrofit = RetrofitClient.getInstance();
         NetworkAPI networkAPI = retrofit.create(NetworkAPI.class);
 
-        // TODO: SET CORRECT FCM ID
-        OrderItem.CreateOrderData orderData = new OrderItem.CreateOrderData(cartItems,deliveryPrice,isPaid,"skdgnskdgnksdgn"
+        OrderItem.CreateOrderData orderData = new OrderItem.CreateOrderData(cartItems,deliveryPrice,isPaid,sharedPreferences.getString(SharedPrefNames.FCM_ID,"")
                 ,sharedPreferences.getString(SharedPrefNames.USER_ID,""),userNameView.getText().toString(),buildingNameView.getText().toString()
                 ,mainAddressView.getText().toString(),landmarkView.getText().toString(),pinCodeView.getText().toString());
 
